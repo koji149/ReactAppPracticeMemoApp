@@ -19,7 +19,7 @@ class MemoDetailScreen extends React.Component {
           講座のアイデアです
         </Text>
       </View>
-      <CircleButton color="white" style={styles.editButton}>
+      <CircleButton color="white" style={styles.editButton} onPress={() => {this.props.navigation.navigate('MemoEdit')}}>
         {'\uf303'}
       </CircleButton>
       </View>
@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
   },
-
   memoHeaderTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   },
   memoHeaderDate: {
     fontSize: 12,
-    clor: '#fff'
+    color: '#fff'
   },
   memoContent: {
     paddingTop: 30,
