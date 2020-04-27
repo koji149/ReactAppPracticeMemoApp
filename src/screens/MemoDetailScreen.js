@@ -38,7 +38,6 @@ const styles = StyleSheet.create({
     justifyContent: 'center',
     padding: 10,
   },
-
   memoHeaderTitle: {
     fontSize: 20,
     fontWeight: 'bold',
@@ -47,7 +46,7 @@ const styles = StyleSheet.create({
   },
   memoHeaderDate: {
     fontSize: 12,
-    clor: '#fff'
+    color: '#fff'
   },
   memoContent: {
     paddingTop: 30,
