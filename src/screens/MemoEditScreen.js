@@ -1,17 +1,53 @@
 import React from 'react';
-import { StyleSheet, View, TextInput } from 'react-native';
-
+import { StyleSheet, KeyboardAvoidingView, TextInput } from 'react-native';
+import firebase from 'firebase';
 import CircleButton from '../elements/CircleButton';
 
 class MemoEditScreen extends React.Component {
+  state = {
+    body: '',
+    key: ',',
+  }
+  componentDidMount() {
+    console.log(this.props.navigation.state.params);
+    const {params} = this.props.navigation.state;
+    this.setState({body: params.memo.body, key: params.memo.key})
+  }
+  handlePress() {
+    const {currentUser} = firebase.auth();
+    const db = firebase.firestore();
+    const newDate = firebase.firestore.Timestamp.now();
+    db.collection(`users/${currentUser.uid}/memos`).doc(this.state.key)
+    .update({
+      body: this.state.body,
+      createOn: newDate,
+    })
+    .then(() => {
+      const { navigation } = this.props
+      navigation.state.params.returnMemo({
+        body: this.state.body,
+        key: this.state.key,
+        createOn: newDate,
+      });
+      navigation.goBack();
+    })
+    .catch(() => {
+    })
+  }
+
   render() {
     return (
-      <View style={ styles.container}>
-        <TextInput style={ styles.memoEditInput } multiline value="hi" />
-        <CircleButton onPress={() => {this.props.navigation.goBak();}}>
+      <KeyboardAvoidingView style={ styles.container} behavior="height" keyboardVerticalOffset={80}>
+        <TextInput 
+        style={ styles.memoEditInput } 
+        multiline value={this.state.body}
+        onChangeText={(text) => {this.setState({ body: text });}}
+        underlineColorAndroid="transparent"
+        textAlignVertical="top"/>
+        <CircleButton onPress={this.handlePress.bind(this)}>
           {'/uf00c'}
         </CircleButton>
-      </View>
+      </KeyboardAvoidingView>
     );
   }
 }

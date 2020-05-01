@@ -1,6 +1,7 @@
 import React from 'react';
-import { StyleSheet, View, TextInput, Text, TouchableHighlight } from 'react-native';
+import { StyleSheet, View, TextInput, Text, TouchableHighlight, TouchableOpacity } from 'react-native';
 import firebase from 'firebase';
+import { StackActions } from 'react-navigation';
 class LoginScreen extends React.Component {
   state = {
     email: '',
@@ -8,15 +9,22 @@ class LoginScreen extends React.Component {
   }
   handleSubmit() {
     firebase.auth().signInWithEmailAndPassword(this.state.email, this.state.password)
-    .then((user) => {
-      console.log('success', user);
-      this.props.navigation.navigate('Home');
+    .then(() => {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [
+          StackActions.navigate({rootName: 'Home' }),
+        ],
+      })
+      this.props.navigation.dispatch(resetAction);
     })
-    .catch((error) => {
-      console.log('error', error);
+    .catch(() => {
     });
   }
 
+  handlePless() {
+    this.props.navigation.navigate('Signup');
+  }
   render() {
     return (
       <View style={ styles.container}>
@@ -29,6 +37,7 @@ class LoginScreen extends React.Component {
           onChangeText={(text) => { this.setState({email: text});}} 
           autoCapitalize="none" autoCorrect={false} 
           placeholder="Email Address"
+          underlineColorAndroid="transparent"
         />
         <TextInput 
           style={styles.input} 
@@ -38,10 +47,14 @@ class LoginScreen extends React.Component {
           autoCorrect={false} 
           placeholder="Password" 
           secureTextEntry
+          underlineColorAndroid="transparent"
         />
-        <TouchableHighlight style={styles.button}  onPress={this.handleSubmit.bind(this)} >
+        <TouchableHighlight style={styles.button}  onPress={this.handleSubmit.bind(this)} underlayColor='#C70F66' >
           <Text style={styles.buttonTitle}>送信</Text>
         </TouchableHighlight>
+        <TouchableOpacity style={styles.signup} onPress={this.handlePless.bind(this)}>
+          <Text style={styles.signupText}>メンバー登録する</Text>
+        </TouchableOpacity>
       </View>
     );
   }
@@ -79,6 +92,13 @@ const styles = StyleSheet.create({
   buttonTitle: {
     color: '#fff',
     fontSize: 18,
+  },
+  signup: {
+    marginTop: 16,
+    alignSelf: 'center',
+  },
+  signupText: {
+    fontSize: 16,
   }
 });
 

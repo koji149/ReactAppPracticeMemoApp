@@ -1,5 +1,6 @@
 import { createAppContainer } from 'react-navigation';
 import { createStackNavigator } from 'react-navigation-stack';
+import {Platform} from 'react-native';
 import firebase from 'firebase';
 
 require("firebase/firestore");
@@ -40,7 +41,17 @@ const App = createStackNavigator({
       headerTintColor: '#fff',
       headerBackTitle: null,
       headerStyle: {
-      backgroundColor: '#000',
+        shadowColor: '#000',
+        shadowOffset: {width: 0, height:2},
+        shadowOpacity: 0.2,
+        shadowRadius: 3,
+        backgroundColor: '#000',
+        ...Platform.select({
+          android: {
+            height: 80,
+            paddingTop: 20,
+          },
+        }),
       },
       headerTitleStyle: {
         color: '#fff',

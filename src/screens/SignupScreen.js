@@ -1,6 +1,8 @@
 import React from 'react';
 import { StyleSheet, View, TextInput, Text, TouchableHighlight } from 'react-native';
 import firebase from 'firebase';
+import { StackActions } from 'react-navigation';
+
 class SignupScreen extends React.Component {
   state = {
     email: '',
@@ -9,12 +11,16 @@ class SignupScreen extends React.Component {
 
   handleSubmit() {
     firebase.auth().createUserWithEmailAndPassword(this.state.email, this.state.password)
-    .then((user) => {
-      console.log('success', user);
-      this.props.navigation.navigate('Home');
-        })
-    .catch((error) => {
-      console.log(error);
+    .then(() => {
+      const resetAction = StackActions.reset({
+        index: 0,
+        actions: [
+          StackActions.navigate({rootName: 'Home' }),
+        ],
+      })
+      this.props.navigation.dispatch(resetAction);
+    })
+    .catch(() => {
     });
   };
 
@@ -41,7 +47,7 @@ class SignupScreen extends React.Component {
           placeholder="Password"
           secureTextEntry
         />
-        <TouchableHighlight style={styles.button}  onPress={this.handleSubmit.bind(this)} underlayColor='#C70F66' >
+        <TouchableHighlight style={styles.button} onPress={this.handleSubmit.bind(this)} underlayColor='#C70F66' >
           <Text style={styles.buttonTitle}>送信</Text>
         </TouchableHighlight>
       </View>
